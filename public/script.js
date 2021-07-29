@@ -4,17 +4,19 @@ var peer = new Peer(/*undefined,{
 }*/)
 
 const $videoContainer = document.querySelector('#video-grid')
-let myVideoStream
+let myStreamToPassToRemote
 
 navigator.mediaDevices
     .getUserMedia({video: true, audio: true})
     .then((stream) => {
-        myVideoStream = stream
-        myVideoStream.getAudioTracks()[0].enabled = false;
-        console.log('Audio Tracks',myVideoStream.getAudioTracks())
+        myStreamToPassToRemote = stream
+        const localStream = stream.clone()
+        localStream.getAudioTracks()[0].enabled = false;
+        console.log('stream',stream)
+        console.log('my video stream',myStreamToPassToRemote)
         /*const newVideoElement = document.createElement('video')
         newVideoElement.style.margin = '20px'*/
-        initVideoStream(stream,prepareVideoElement())
+        initVideoStream(localStream,prepareVideoElement())
 
         //Provide your own stream if you're a new joiner (when someone calls for your stream)
         peer.on('call', function(call) {
@@ -27,7 +29,6 @@ navigator.mediaDevices
                 console.log('call.on(stream) 1: ',remoteStream)
                 //const newVideoElement = document.createElement('video')
                 // Show stream in some video/canvas element.
-                remoteStream.getAudioTracks()[1].enabled = true
                 initVideoStream(remoteStream,videoElement)
             });
         });
@@ -43,7 +44,6 @@ navigator.mediaDevices
                 console.log('call.on(stream) 2: ',remoteStream)
                 //const newVideoElement = document.createElement('video')
                 // Show stream in some video/canvas element.
-                remoteStream.getAudioTracks()[0].enabled = true
                 initVideoStream(remoteStream,videoElement)
             });
         })
@@ -65,25 +65,25 @@ const initVideoStream = (stream, video) => {
 }
 
 const muteUnmute = () => {
-    const enabled = myVideoStream.getAudioTracks()[0].enabled;
+    const enabled = myStreamToPassToRemote.getAudioTracks()[0].enabled;
     if (enabled) {
-        myVideoStream.getAudioTracks()[0].enabled = false;
+        myStreamToPassToRemote.getAudioTracks()[0].enabled = false;
         setUnmuteButton();
     } else {
         setMuteButton();
-        myVideoStream.getAudioTracks()[0].enabled = true;
+        myStreamToPassToRemote.getAudioTracks()[0].enabled = true;
     }
 }
 
 const playStop = () => {
     console.log('object')
-    let enabled = myVideoStream.getVideoTracks()[0].enabled;
+    let enabled = myStreamToPassToRemote.getVideoTracks()[0].enabled;
     if (enabled) {
-        myVideoStream.getVideoTracks()[0].enabled = false;
+        myStreamToPassToRemote.getVideoTracks()[0].enabled = false;
         setPlayVideo()
     } else {
         setStopVideo()
-        myVideoStream.getVideoTracks()[0].enabled = true;
+        myStreamToPassToRemote.getVideoTracks()[0].enabled = true;
     }
 }
 
