@@ -10,6 +10,8 @@ navigator.mediaDevices
     .getUserMedia({video: true, audio: true})
     .then((stream) => {
         myVideoStream = stream
+        myVideoStream.getAudioTracks()[0].enabled = false;
+        console.log('Audio Tracks',myVideoStream.getAudioTracks())
         /*const newVideoElement = document.createElement('video')
         newVideoElement.style.margin = '20px'*/
         initVideoStream(stream,prepareVideoElement())
@@ -25,6 +27,7 @@ navigator.mediaDevices
                 console.log('call.on(stream) 1: ',remoteStream)
                 //const newVideoElement = document.createElement('video')
                 // Show stream in some video/canvas element.
+                remoteStream.getAudioTracks()[1].enabled = true
                 initVideoStream(remoteStream,videoElement)
             });
         });
@@ -40,6 +43,7 @@ navigator.mediaDevices
                 console.log('call.on(stream) 2: ',remoteStream)
                 //const newVideoElement = document.createElement('video')
                 // Show stream in some video/canvas element.
+                remoteStream.getAudioTracks()[0].enabled = true
                 initVideoStream(remoteStream,videoElement)
             });
         })
