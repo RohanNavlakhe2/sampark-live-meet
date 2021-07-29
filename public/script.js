@@ -7,7 +7,7 @@ const $videoContainer = document.querySelector('#video-grid')
 let myVideoStream
 
 navigator.mediaDevices
-    .getUserMedia({video: true/*, audio: true*/})
+    .getUserMedia({video: true, audio: true})
     .then((stream) => {
         myVideoStream = stream
         /*const newVideoElement = document.createElement('video')
