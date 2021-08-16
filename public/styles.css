@@ -3,6 +3,11 @@ body{
     margin: 0;
 }
 
+#login-section{
+    background-color: #1C1E20;
+    height: 100vh;
+}
+
 .main {
     height: 100vh;
     display: flex;
@@ -106,5 +111,17 @@ body{
 
 .unmute, .stop {
     color: #CC3B33;
+}
+
+#video-grid{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+video{
+    height: 300px;
+    width: 400px;
+    object-fit: cover;
+    padding: 8px;
 }
 

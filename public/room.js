@@ -6,21 +6,22 @@ var peer = new Peer(/*undefined,{
 const $videoContainer = document.querySelector('#video-grid')
 let myStreamToPassToRemote
 
+
 navigator.mediaDevices
     .getUserMedia({video: true, audio: true})
     .then((stream) => {
         myStreamToPassToRemote = stream
-        const localStream = stream.clone()
+       /* const localStream = stream.clone()
         localStream.getAudioTracks()[0].enabled = false;
-        console.log('stream',stream)
-        console.log('my video stream',myStreamToPassToRemote)
-        /*const newVideoElement = document.createElement('video')
-        newVideoElement.style.margin = '20px'*/
-        initVideoStream(localStream,prepareVideoElement())
+        initVideoStream(localStream,prepareVideoElement())*/
+        mute()
+        stopVideo()
+        initVideoStream(stream,prepareVideoElement())
 
         //Provide your own stream if you're a new joiner (when someone calls for your stream)
         peer.on('call', function(call) {
             console.log('Got call for stream : ',call.message)
+            //stopVideo()
             call.answer(stream); // Answer the call with an A/V stream.
            /* const newVideoElement = document.createElement('video')
             newVideoElement.style.margin = '20px'*/
@@ -37,12 +38,9 @@ navigator.mediaDevices
         socket.on('message',(newJoinerId) => {
             console.log("A user has joined the conference : ",newJoinerId)
             var call = peer.call(newJoinerId,stream);
-           /* const newVideoElement = document.createElement('video')
-            newVideoElement.style.margin = '20px'*/
             const videoElement = prepareVideoElement()
             call.on('stream', function(remoteStream) {
                 console.log('call.on(stream) 2: ',remoteStream)
-                //const newVideoElement = document.createElement('video')
                 // Show stream in some video/canvas element.
                 initVideoStream(remoteStream,videoElement)
             });
@@ -53,7 +51,7 @@ navigator.mediaDevices
 
 
 peer.on('open',(peerId) => {
-    socket.emit('new-user',peerId)
+    socket.emit('new-user',peerId,room)
 })
 
 const initVideoStream = (stream, video) => {
@@ -62,6 +60,10 @@ const initVideoStream = (stream, video) => {
         video.play()
     })
     $videoContainer.append(video)
+}
+
+const removeParticipantsVideoOnLeft = () => {
+
 }
 
 const muteUnmute = () => {
@@ -75,6 +77,14 @@ const muteUnmute = () => {
     }
 }
 
+const mute = () => {
+    const enabled = myStreamToPassToRemote.getAudioTracks()[0].enabled;
+    if (enabled) {
+        myStreamToPassToRemote.getAudioTracks()[0].enabled = false;
+        setUnmuteButton();
+    }
+}
+
 const playStop = () => {
     console.log('object')
     let enabled = myStreamToPassToRemote.getVideoTracks()[0].enabled;
@@ -84,6 +94,14 @@ const playStop = () => {
     } else {
         setStopVideo()
         myStreamToPassToRemote.getVideoTracks()[0].enabled = true;
+    }
+}
+
+const stopVideo = () => {
+    let enabled = myStreamToPassToRemote.getVideoTracks()[0].enabled;
+    if (enabled) {
+        myStreamToPassToRemote.getVideoTracks()[0].enabled = false;
+        setPlayVideo()
     }
 }
 
@@ -119,11 +137,5 @@ const setPlayVideo = () => {
     document.querySelector('.main__video_button').innerHTML = html;
 }
 
-const prepareVideoElement = () => {
-    const newVideoElement = document.createElement('video')
-    newVideoElement.style.margin = '20px'
-    newVideoElement.style.width = '300px'
-    newVideoElement.style.height = '300px'
-    return newVideoElement
-}
+const prepareVideoElement = () => document.createElement('video')
 
