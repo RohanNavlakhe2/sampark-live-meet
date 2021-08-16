@@ -151,5 +151,11 @@ const setPlayVideo = () => {
     document.querySelector('.main__video_button').innerHTML = html;
 }
 
-const prepareVideoElement = () => document.createElement('video')
+const prepareVideoElement = () =>
+{
+    const videoElement = document.createElement('video')
+    videoElement.width = 400
+    videoElement.height = 300
+    return videoElement
+}
 
