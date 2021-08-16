@@ -23,7 +23,7 @@
           <div class="card-body">
               <!--data-bs-toggle="modal" data-bs-target="#exampleModal"-->
               <button type="button" class="btn btn-primary d-block" style="width: 27rem" data-bs-toggle="modal" data-bs-target="#exampleModal">Start New Meeting</button>
-              <button class="btn btn-primary d-block" style="width: 27rem">Join Meeting</button>
+              <!--<button class="btn btn-primary d-block" style="width: 27rem">Join Meeting</button>-->
           </div>
       </div>
   </section>
@@ -38,8 +38,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h6>Share this room id to the participants</h6>
-                <p><%= newRoomId %></p>
+                <h6>Share this room link to the participants</h6>
+                <p>https://sampark-live-meet.herokuapp.com/joinroom/<%= newRoomId %></p>
             </div>
             <div class="modal-footer" id="continue-btn">
                 <!---->
