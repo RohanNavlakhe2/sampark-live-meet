@@ -6,11 +6,15 @@ const {ExpressPeerServer} = require('peer')
 
 const app = express()
 
-const server = http.Server(app)
+//const server = http.Server(app)
+const server = http.createServer(app)
 const io = socketio(server)
-const peerServer = ExpressPeerServer(server, {
+/*const peerServer = ExpressPeerServer(server, {
     debug: true,
     path:"/peerjs"
+});*/
+const peerServer = ExpressPeerServer(server, {
+    debug: true,
 });
 
 
@@ -20,6 +24,12 @@ app.set('view engine','ejs')
 
 
 app.get('',(req,res) => {
+    res.render('index',{newRoomId:uuidv4()})
+
+})
+
+app.get('peerjs/myapp',(req,res) => {
+    console.log('peerjs/myapp')
     res.render('index',{newRoomId:uuidv4()})
 
 })
@@ -37,6 +47,10 @@ io.on('connection',(socket) => {
         socket.join(roomId)
         //socket.emit('message',`Welcome to the Room`)
         socket.broadcast.to(roomId).emit('message',newUserId)
+    })
+
+    socket.on('test',(msg) => {
+        console.log(msg)
     })
 })
 

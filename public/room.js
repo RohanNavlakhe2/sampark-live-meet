@@ -1,7 +1,8 @@
 const socket = io()
-var peer = new Peer(/*undefined,{
-   path:'/peerjs',host:'localhost',port:9000 //443
-}*/)
+//var peer = new Peer()
+//var peer = new Peer({host:'0.peerjs.com',port:443})
+//var peer = new Peer({host:'9000-black-scallop-94kkam9v.ws-us14.gitpod.io',port:9000,path:"/",secure:true})
+var peer = new Peer({host:'/',port:'443',path:"/peerjs"/*,secure:true*/})
 
 const $videoContainer = document.querySelector('#video-grid')
 let myStreamToPassToRemote
@@ -32,7 +33,7 @@ navigator.mediaDevices
 
         //Provide your own stream if you're a new joiner (when someone calls for your stream)
         peer.on('call', function(call) {
-            console.log('Got call for stream : ',call.message)
+            console.log('Got call for stream : ',call)
             //stopVideo()
             call.answer(stream); // Answer the call with an A/V stream.
            /* const newVideoElement = document.createElement('video')
@@ -59,12 +60,20 @@ navigator.mediaDevices
         })
     })
 
-
-
-
 peer.on('open',(peerId) => {
     socket.emit('new-user',peerId,room)
+    //socket.emit('test','peer opened')
 })
+
+/*peer.on('close',() => {
+    console.log('peer closed')
+    socket.emit('test','peer closed')
+})
+
+peer.on('disconnected',() => {
+    console.log('peer disconnected')
+    socket.emit('test','peer disconnected')
+})*/
 
 const initVideoStream = (stream, video) => {
     video.srcObject = stream
@@ -158,4 +167,24 @@ const prepareVideoElement = () =>
     videoElement.height = 300
     return videoElement
 }
+
+/*window.addEventListener('beforeunload', function (e) {
+    //socket.emit('test','tab or browser closed')
+    e.preventDefault();
+    e.returnValue = 'rohan';
+    return 'rohan'
+
+});*/
+
+/*window.addEventListener("beforeunload", function (e) {
+    socket.emit('test','tab or browser closed')
+    var confirmationMessage = "\o/";
+
+    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage;                            //Webkit, Safari, Chrome
+});*/
+
+window.onbeforeunload = function () {
+    return "Do you really want to close?";
+};
 
