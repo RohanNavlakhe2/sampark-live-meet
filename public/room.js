@@ -2,7 +2,8 @@ const socket = io()
 //var peer = new Peer()
 //var peer = new Peer({host:'0.peerjs.com',port:443})
 //var peer = new Peer({host:'9000-black-scallop-94kkam9v.ws-us14.gitpod.io',port:9000,path:"/",secure:true})
-var peer = new Peer({host:'/',port:'443',path:"/peerjs"/*,secure:true*/})
+//var peer = new Peer({host:'/',port:'443',path:"/peerjs"/*,secure:true*/})
+var peer = new Peer({host:'sampark-live-meet.herokuapp.com',port:'443',path:"/peerjs"/*,secure:true*/})
 
 const $videoContainer = document.querySelector('#video-grid')
 let myStreamToPassToRemote
