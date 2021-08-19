@@ -1,13 +1,14 @@
 const socket = io()
-//var peer = new Peer()
+var peer = new Peer()
 //var peer = new Peer({host:'0.peerjs.com',port:443})
 //var peer = new Peer({host:'9000-black-scallop-94kkam9v.ws-us14.gitpod.io',port:9000,path:"/",secure:true})
 //var peer = new Peer({host:'/',port:'443',path:"/peerjs"/*,secure:true*/})
-var peer = new Peer({host:'sampark-live-meet.herokuapp.com',port:'443',path:"/peerjs"/*,secure:true*/})
+//var peer = new Peer({host:'sampark-live-meet.herokuapp.com',port:'443',path:"/peerjs"/*,secure:true*/})
 
 const $videoContainer = document.querySelector('#video-grid')
 let myStreamToPassToRemote
 let localStream
+let newpeerId
 
 
 navigator.mediaDevices
@@ -51,13 +52,19 @@ navigator.mediaDevices
         //Get stream from new joiner
         socket.on('message',(newJoinerId) => {
             console.log("A user has joined the conference : ",newJoinerId)
-            var call = peer.call(newJoinerId,stream);
+             alert('New user has joined.Plz click on Allow to get user in')
+            newpeerId = newJoinerId
+           /* var call = peer.call(newJoinerId,stream);
             const videoElement = prepareVideoElement()
             call.on('stream', function(remoteStream) {
                 console.log('call.on(stream) 2: ',remoteStream)
                 // Show stream in some video/canvas element.
                 initVideoStream(remoteStream,videoElement)
-            });
+            });*/
+        })
+
+        socket.on('welcome',(msg) => {
+            alert(msg)
         })
     })
 
@@ -188,4 +195,15 @@ const prepareVideoElement = () =>
 window.onbeforeunload = function () {
     return "Do you really want to close?";
 };
+
+const allowNewUser = () => {
+    console.log('allow new user')
+    var call = peer.call(newpeerId,myStreamToPassToRemote);
+    const videoElement = prepareVideoElement()
+    call.on('stream', function(remoteStream) {
+        console.log('call.on(stream) 2: ',remoteStream)
+        // Show stream in some video/canvas element.
+        initVideoStream(remoteStream,videoElement)
+    });
+}
 

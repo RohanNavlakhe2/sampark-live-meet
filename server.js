@@ -9,13 +9,13 @@ const app = express()
 //const server = http.Server(app)
 const server = http.createServer(app)
 const io = socketio(server)
-/*const peerServer = ExpressPeerServer(server, {
-    debug: true,
-    path:"/peerjs"
-});*/
 const peerServer = ExpressPeerServer(server, {
     debug: true,
+    path:"/peerjs"
 });
+/*const peerServer = ExpressPeerServer(server, {
+    debug: true,
+});*/
 
 
 app.use('/peerjs',peerServer)
@@ -45,7 +45,7 @@ io.on('connection',(socket) => {
     socket.on('new-user',(newUserId,roomId) => {
         console.log("Room : "+roomId)
         socket.join(roomId)
-        //socket.emit('message',`Welcome to the Room`)
+        socket.emit('welcome',`Welcome to the Room.Please wait for the others to let you in`)
         socket.broadcast.to(roomId).emit('message',newUserId)
     })
 
