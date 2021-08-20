@@ -52,15 +52,15 @@ navigator.mediaDevices
         //Get stream from new joiner
         socket.on('message',(newJoinerId) => {
             console.log("A user has joined the conference : ",newJoinerId)
-             alert('New user has joined.Plz click on Allow to get user in')
+             alert('New user has joined')
             newpeerId = newJoinerId
-           /* var call = peer.call(newJoinerId,stream);
+            var call = peer.call(newJoinerId,stream);
             const videoElement = prepareVideoElement()
             call.on('stream', function(remoteStream) {
                 console.log('call.on(stream) 2: ',remoteStream)
                 // Show stream in some video/canvas element.
                 initVideoStream(remoteStream,videoElement)
-            });*/
+            });
         })
 
         socket.on('welcome',(msg) => {
@@ -89,10 +89,6 @@ const initVideoStream = (stream, video) => {
         video.play()
     })
     $videoContainer.append(video)
-}
-
-const removeParticipantsVideoOnLeft = () => {
-
 }
 
 const muteUnmute = () => {
@@ -192,18 +188,9 @@ const prepareVideoElement = () =>
     return confirmationMessage;                            //Webkit, Safari, Chrome
 });*/
 
-window.onbeforeunload = function () {
+/*window.onbeforeunload = function () {
     return "Do you really want to close?";
-};
+};*/
 
-const allowNewUser = () => {
-    console.log('allow new user')
-    var call = peer.call(newpeerId,myStreamToPassToRemote);
-    const videoElement = prepareVideoElement()
-    call.on('stream', function(remoteStream) {
-        console.log('call.on(stream) 2: ',remoteStream)
-        // Show stream in some video/canvas element.
-        initVideoStream(remoteStream,videoElement)
-    });
-}
+
 

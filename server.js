@@ -28,11 +28,11 @@ app.get('',(req,res) => {
 
 })
 
-app.get('peerjs/myapp',(req,res) => {
+/*app.get('peerjs/myapp',(req,res) => {
     console.log('peerjs/myapp')
     res.render('index',{newRoomId:uuidv4()})
 
-})
+})*/
 
 app.get('/joinroom/:roomId',(req,res) => {
     console.log(`/joinroom = ${req.params.roomId}`)
@@ -45,7 +45,7 @@ io.on('connection',(socket) => {
     socket.on('new-user',(newUserId,roomId) => {
         console.log("Room : "+roomId)
         socket.join(roomId)
-        socket.emit('welcome',`Welcome to the Room.Please wait for the others to let you in`)
+        socket.emit('welcome',`Welcome to the Room`)
         socket.broadcast.to(roomId).emit('message',newUserId)
     })
 
